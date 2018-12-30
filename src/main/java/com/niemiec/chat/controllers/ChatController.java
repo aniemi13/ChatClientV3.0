@@ -93,6 +93,7 @@ public class ChatController {
 	
 	@FXML
 	void suggestAGame() {
+		client.playBattleships();
 		//wysłanie prośby o grę do gracza
 		//jeżeli gra już trwa to po wciśnięciu przycisku wyświetli się plansza gry
 	}

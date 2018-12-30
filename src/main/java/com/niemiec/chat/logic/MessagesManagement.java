@@ -1,6 +1,7 @@
 package com.niemiec.chat.logic;
 
-import com.niemiec.battleship.manager.BattleshipGamesManager;
+import com.niemiec.battleship.logic.BattleshipManagement;
+import com.niemiec.battleship.manager.BattleshipGame;
 import com.niemiec.chat.controllers.ChatController;
 import com.niemiec.chat.controllers.GetNickController;
 import com.niemiec.chat.messages.CheckNickMessage;
@@ -9,8 +10,11 @@ import com.niemiec.chat.messages.GroupMessage;
 import com.niemiec.chat.messages.PrivateMessage;
 import com.niemiec.chat.messages.ReadyToWorkMessage;
 import com.niemiec.chat.messages.UsersListMessage;
+import com.niemiec.chat.objects.Client;
 import com.niemiec.chat.objects.GeneralChat;
 import com.niemiec.chat.objects.managers.InterlocutorsManager;
+
+import javafx.event.ActionEvent;
 
 public class MessagesManagement {
 	private ChatController chatController;
@@ -19,13 +23,14 @@ public class MessagesManagement {
 	private GeneralChat generalChat;
 	private String nick;
 	private String actualInterlocutor;
-	private BattleshipGamesManager battleshipGamesManager;
 
-	public MessagesManagement() {
+	private BattleshipManagement battleshipManagement;
+
+	public MessagesManagement(Client client) {
 		this.actualInterlocutor = "";
 		this.interlocutorsManager = new InterlocutorsManager();
 		this.generalChat = new GeneralChat();
-		this.battleshipGamesManager = new BattleshipGamesManager();
+		this.battleshipManagement = new BattleshipManagement(client);
 	}
 
 	public void receiveTheObject(Object object) {
@@ -35,6 +40,8 @@ public class MessagesManagement {
 			receivePrivateMessage((PrivateMessage) object);
 		} else if (object instanceof UsersListMessage) {
 			receiveUsersListMessage((UsersListMessage) object);
+		} else if (object instanceof BattleshipGame) {
+			receiveBattleshipGame((BattleshipGame) object);
 		} else if (object instanceof CheckNickMessage) {
 			receiveCheckNickMessage((CheckNickMessage) object);
 		}
@@ -60,14 +67,15 @@ public class MessagesManagement {
 		generalChat.addMessage(m);
 		chatController.addMessageToGeneralChat(m);
 	}
-	
+
 	private void receiveCheckNickMessage(CheckNickMessage checkNickMessage) {
 		getNickController.reciveTheInformation(checkNickMessage.isNickNotExist());
 	}
 
 	public void receiveUsersListMessage(UsersListMessage usersListMessage) {
 		chatController.updateUsersList(usersListMessage.getUsersArrayList());
-		battleshipGamesManager.updateUsersList(usersListMessage.getUsersArrayList());
+		// TODO
+//		battleshipGamesManager.updateUsersList(usersListMessage.getUsersArrayList());
 	}
 
 	public void setActualInterlocutor(String selectedNick) {
@@ -78,17 +86,10 @@ public class MessagesManagement {
 		} else if (!selectedNick.equals(actualInterlocutor)) {
 			addInterlocutorIfNotExist(selectedNick);
 			actualInterlocutor = selectedNick;
-			if (interlocutorsManager.haveMessages(selectedNick)) {
-				updatePrivateChatListView();
-
-				// TODO WIADOMOŚĆ ODCZYTANA - ZNIKA PODŚWIETLENIE UŻYTKOWNIKA
-			} else {
-				chatController.clearPrivateListView();
-			}
+			updatePrivateChatListView();
+			// TODO WIADOMOŚĆ ODCZYTANA - ZNIKA PODŚWIETLENIE UŻYTKOWNIKA
+			interlocutorsManager.setMessageIsRead(selectedNick, true);
 			chatController.unlockPrivateChat();
-			// aktualizacja wyświetlania prywatnej wiadomości - ustawienie, że wiadomość
-			// odczytana
-			// i wyświetlenie jej
 		}
 
 	}
@@ -152,5 +153,17 @@ public class MessagesManagement {
 
 	public Object sendNickToCheck(String nick) {
 		return new CheckNickMessage(nick);
+	}
+
+	private void receiveBattleshipGame(BattleshipGame battleshipGame) {
+		battleshipManagement.receiveBattleshipGame(battleshipGame);
+	}
+
+	public Object playBattleship() {
+		return battleshipManagement.playBattleships(nick, actualInterlocutor);
+	}
+
+	public Object sendBattleshipGame(ActionEvent event) {
+		return battleshipManagement.sendBattleshipGame(nick, actualInterlocutor, event);
 	}
 }
