@@ -94,9 +94,14 @@ public class ChatController {
 	@FXML
 	void suggestAGame() {
 		client.playBattleships();
+//		suggestAGameButton.setDisable(true);
 		//wysłanie prośby o grę do gracza
 		//jeżeli gra już trwa to po wciśnięciu przycisku wyświetli się plansza gry
 	}
+	
+//	public void suggestAGameButtonNotDisable() {
+//		suggestAGameButton.setDisable(false);
+//	}
 
 	public ArrayList<String> getUsersList(ObservableList<String> obs) {
 		ArrayList<String> a = new ArrayList<>();

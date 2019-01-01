@@ -1,5 +1,7 @@
 package com.niemiec.chat.logic;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.battleship.manager.BattleshipGame;
 import com.niemiec.chat.controllers.ChatController;
@@ -160,10 +162,18 @@ public class MessagesManagement {
 	}
 
 	public Object playBattleship() {
-		return battleshipManagement.playBattleships(nick, actualInterlocutor);
+		return battleshipManagement.playBattleship(nick, actualInterlocutor);
 	}
 
-	public Object sendBattleshipGame(ActionEvent event) {
-		return battleshipManagement.sendBattleshipGame(nick, actualInterlocutor, event);
+	public Object sendBattleshipGame(String opponentPlayerNick, ActionEvent event) {
+		return battleshipManagement.sendBattleshipGame(opponentPlayerNick, event);
+	}
+
+	public Object sendAcceptTheBattleshipGame(boolean isAccept, String opponentPlayerNick) {
+		return battleshipManagement.sendAcceptTheBattleshipGame(isAccept, opponentPlayerNick);
+	}
+
+	public boolean whetherTheBattleshipGameExists() {
+		return battleshipManagement.whetherTheBattleshipGameExists(actualInterlocutor);
 	}
 }

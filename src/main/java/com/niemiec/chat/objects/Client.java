@@ -56,10 +56,16 @@ public class Client {
 	}
 
 	public void playBattleships() {
-		connection.sendTheObject(messagesManagement.playBattleship());
+		if (!messagesManagement.whetherTheBattleshipGameExists())
+			connection.sendTheObject(messagesManagement.playBattleship());
 	}
-	
-	public void sendBattleshipGame(ActionEvent event) {
-		connection.sendTheObject(messagesManagement.sendBattleshipGame(event));
+
+	public void sendBattleshipGame(String opponentPlayerNick, ActionEvent event) {
+		connection.sendTheObject(messagesManagement.sendBattleshipGame(opponentPlayerNick, event));
 	}
+
+	public void acceptTheBattleshipGame(boolean isAccept, String opponentPlayerNick) {
+		connection.sendTheObject(messagesManagement.sendAcceptTheBattleshipGame(isAccept, opponentPlayerNick));
+	}
+
 }

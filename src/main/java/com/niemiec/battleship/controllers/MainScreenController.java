@@ -625,6 +625,7 @@ public class MainScreenController {
 	private CheckMenuItem automaticallySpacingOfShipsButton;
 
 	private Client client;
+	private String opponentPlayerNick;
 //	private GameLogic gameLogic;
 //	private Exit exit;
 
@@ -653,7 +654,7 @@ public class MainScreenController {
 	@FXML
 	void opponentButtonAction(ActionEvent event) {
 //		gameLogic.shot(event);
-		client.sendBattleshipGame(event);
+		client.sendBattleshipGame(opponentPlayerNick, event);
 	}
 
 	@FXML
@@ -682,5 +683,9 @@ public class MainScreenController {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public void setOpponentPlayerNick(String opponentPlayerNick) {
+		this.opponentPlayerNick = opponentPlayerNick;
 	}
 }
