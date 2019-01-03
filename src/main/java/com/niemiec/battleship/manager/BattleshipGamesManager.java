@@ -61,6 +61,7 @@ public class BattleshipGamesManager {
 				battleshipViews.remove(i);
 				mainScreenControllers.remove(i);
 				opponentPlayers.remove(i);
+				return;
 			}
 		}
 	}

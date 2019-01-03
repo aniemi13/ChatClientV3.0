@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class BattleshipGame implements Serializable {
 	public static final int GAME_PROPOSAL = 10;
 	public static final int REJECTION_GAME_PROPOSAL = 11;
-	public static final int ACCEPTING_THE_GAME = 12;
+	public static final int ACCEPTING_THE_GAME = 12; // też tylko do serwera, poten on wysyła już start game
 	public static final int SHIPS_ADDED = 13; //tej informacji będzie potrzebował tylko serwer
 	public static final int START_THE_GAME = 14;
 	public static final int UPDATE_BATTLESHIPGAME = 15;

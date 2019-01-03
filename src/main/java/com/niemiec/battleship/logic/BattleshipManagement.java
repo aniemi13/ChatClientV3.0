@@ -37,27 +37,24 @@ public class BattleshipManagement {
 	}
 
 	private void receiveGameProposal(BattleshipGame battleshipGame) {
-		// TODO Auto-generated method stub
-		// zmiana okna oczekiwania na okno z planszami
-		// zaczęscie dodawania statków
-		// po dodaniu zamiana gameStatus na ship_added i wysłanie komunikatu do serwera
 		String nick = battleshipGame.getInvitingPlayerNick();
 		String opponentPlayerNick = battleshipGame.getOpponentPlayerNick();
 		BattleshipView battleshipView = new BattleshipView(nick, opponentPlayerNick, client, this);
 		battleshipGamesManager.addBattleshipGame(battleshipGame, battleshipView);
-		System.out.println("OpponentPlayerNick: " + opponentPlayerNick);
 		battleshipView.showAcceptanceWindow();
-		// ZABLOKOWAĆ PRZYCISK GRAJ PRZY DANYM GRACZU
 	}
 
 	private void receiveRejectionGameProposal(BattleshipGame battleshipGame) {
-		// TODO Auto-generated method stub
-
+		String opponentPlayerNick = battleshipGame.getOpponentPlayerNick();
+		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
+		battleshipView.closeWaitingWindow();
+		battleshipView.showInformationAndAcceptanceWindow("Użytkownik " + opponentPlayerNick + " nie zaakceptował gry");
 	}
 
 	private void receiveAcceptingTheGame(BattleshipGame battleshipGame) {
-		// TODO Auto-generated method stub
-
+		String opponentPlayerNick = battleshipGame.getOpponentPlayerNick();
+		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
+		battleshipView.closeWaitingWindow();
 	}
 
 	private void receiveStartTheGame(BattleshipGame battleshipGame) {
@@ -75,12 +72,7 @@ public class BattleshipManagement {
 		BattleshipView battleshipView = new BattleshipView(nick, opponentPlayerNick, client, this);
 		battleshipGamesManager.addBattleshipGame(battleshipGame, battleshipView);
 		battleshipView.showWaitingWindow("Oczekiwanie na akcpetację użytkownika " + opponentPlayerNick);
-		// TODO wyświetlić okno oczekiwania na akceptację
-		// jeżeli nie zaakceptowane to komunikat, wciskamy OK i dane BattleshipGame i
-		// BattleshipView są usuwane
-		// jeżeli zaakceptowane wyświetlamy planszę
 		return battleshipGame;
-		// ZABLOKOWAĆ PRZYCISK GRAJ PRZY DANYM GRACZU
 	}
 
 	public Object sendBattleshipGame(String opponentPlayerNick, ActionEvent event) {
@@ -93,19 +85,25 @@ public class BattleshipManagement {
 		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
 		if (isAccept) {
 			battleshipGame.setGameStatus(BattleshipGame.ACCEPTING_THE_GAME);
-			// TODO Wyświetl pole gry, zamknij okno z pytaniem
 			battleshipView.closeAcceptanceWindow();
 			battleshipView.showBattleshipWindow();
 			
 		} else {
 			battleshipGame.setGameStatus(BattleshipGame.REJECTION_GAME_PROPOSAL);
+			battleshipView.closeAcceptanceWindow();
+			battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
 		}
 
 		return battleshipGame;
 	}
 
 	public boolean whetherTheBattleshipGameExists(String opponentPlayerNick) {
-		System.out.println("Jestem w funkcji sprawdzjącej istnieje BattleshipGame: " + opponentPlayerNick);
 		return battleshipGamesManager.getBattleshipGame(opponentPlayerNick) != null;
+	}
+
+	public void acceptRejectionGameProspalInformation(String opponentPlayerNick) {
+		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
+		battleshipView.closeInformationAndAcceptanceWindow();
+		battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
 	}
 }

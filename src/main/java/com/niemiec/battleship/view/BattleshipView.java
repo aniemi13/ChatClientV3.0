@@ -2,6 +2,7 @@ package com.niemiec.battleship.view;
 
 import com.niemiec.battleship.controllers.MainScreenController;
 import com.niemiec.battleship.controllers.AcceptanceWindowController;
+import com.niemiec.battleship.controllers.InformationAndAcceptanceController;
 import com.niemiec.battleship.controllers.WaitingWindowController;
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.objects.Client;
@@ -32,6 +33,11 @@ public class BattleshipView {
 	private AcceptanceWindowController acceptanceWindowController;
 	private VBox vBoxAcceptanceWindow;
 	private Stage stageAcceptanceWindow;
+	
+	private FXMLLoader informationAndAcceptanceWindowLoader;
+	private InformationAndAcceptanceController informationAndAcceptanceController;
+	private VBox vBoxInformationAndAcceptanceWindow;
+	private Stage stageInformationAndAcceptanceWindow;
 
 	public BattleshipView(String nick, String opponentNick, Client client, BattleshipManagement battleshipManagement) {
 		this.nick = nick;
@@ -58,16 +64,18 @@ public class BattleshipView {
 		Scene scene = new Scene(vBoxMainScreen);
 		stageMainScreen.setTitle("Battleship: " + nick + " vs " + opponentPlayerNick);
 		stageMainScreen.setScene(scene);
-	
+
 		stageMainScreen.show();
 	}
-	
+
 	public void showAddedShipsBattleshipWindow() {
-		
+
 	}
-	
+
 	public void closeBattleshipWindow() {
-		stageMainScreen.close();
+		Platform.runLater(() -> {
+			stageMainScreen.close();
+		});
 	}
 
 	private void loadWaitingWindow() {
@@ -83,18 +91,22 @@ public class BattleshipView {
 
 	public void showWaitingWindow(String message) {
 		loadWaitingWindow();
-	
-		stageWaitingWindows = new Stage();
-		Scene scene = new Scene(vBoxWaitingWindow);
-		stageWaitingWindows.setScene(scene);
-		waitingWindowController.setTextLabel(message);
-		stageWaitingWindows.show();
+
+		Platform.runLater(() -> {
+			stageWaitingWindows = new Stage();
+			Scene scene = new Scene(vBoxWaitingWindow);
+			stageWaitingWindows.setScene(scene);
+			waitingWindowController.setTextLabel(message);
+			stageWaitingWindows.show();
+		});
 	}
-	
+
 	public void closeWaitingWindow() {
-		stageWaitingWindows.close();
+		Platform.runLater(() -> {
+			stageWaitingWindows.close();
+		});
 	}
-	
+
 	private void loadAcceptanceWindow() {
 		acceptanceWindowLoader = new FXMLLoader(this.getClass().getResource("/fxml/battleship/AcceptanceWindow.fxml"));
 		vBoxAcceptanceWindow = null;
@@ -120,9 +132,43 @@ public class BattleshipView {
 			stageAcceptanceWindow.show();
 		});
 	}
-	
+
 	public void closeAcceptanceWindow() {
-		stageAcceptanceWindow.close();
+		Platform.runLater(() -> {
+			stageAcceptanceWindow.close();
+		});
+	}
+	
+	private void loadInformationAndAcceptanceWindow() {
+		informationAndAcceptanceWindowLoader = new FXMLLoader(this.getClass().getResource("/fxml/battleship/InformationAndAcceptanceWindow.fxml"));
+		vBoxInformationAndAcceptanceWindow = null;
+		
+		try {
+			vBoxInformationAndAcceptanceWindow = informationAndAcceptanceWindowLoader.load();
+		} catch (Exception e) {
+		}
+		informationAndAcceptanceController = informationAndAcceptanceWindowLoader.getController();
+		informationAndAcceptanceController.setBattleshipManagement(battleshipManagement);
+		informationAndAcceptanceController.setOpponentPlayerNick(opponentPlayerNick);
+		
+	}
+	
+	public void showInformationAndAcceptanceWindow(String message) {
+		loadInformationAndAcceptanceWindow();
+		
+		Platform.runLater(() -> {
+			stageInformationAndAcceptanceWindow = new Stage();
+			Scene scene = new Scene(vBoxInformationAndAcceptanceWindow);
+			stageInformationAndAcceptanceWindow.setScene(scene);
+			informationAndAcceptanceController.setTextLabel(message);
+			stageInformationAndAcceptanceWindow.show();
+		});
+	}
+	
+	public void closeInformationAndAcceptanceWindow() {
+		Platform.runLater(() -> {
+			stageInformationAndAcceptanceWindow.close();
+		});
 	}
 
 	public MainScreenController getMainScreenController() {
