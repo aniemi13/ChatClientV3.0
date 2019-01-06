@@ -24,7 +24,7 @@ public class BattleshipView {
 	private VBox vBoxMainScreen;
 	private Stage stageMainScreen;
 
-	private WaitingWindowController waitingWindowController;
+	private WaitingWindowController waitingWindowController = null;
 	private FXMLLoader waitingWindowLoader;
 	private VBox vBoxWaitingWindow;
 	private Stage stageWaitingWindows;
@@ -33,7 +33,7 @@ public class BattleshipView {
 	private AcceptanceWindowController acceptanceWindowController;
 	private VBox vBoxAcceptanceWindow;
 	private Stage stageAcceptanceWindow;
-	
+
 	private FXMLLoader informationAndAcceptanceWindowLoader;
 	private InformationAndAcceptanceController informationAndAcceptanceController;
 	private VBox vBoxInformationAndAcceptanceWindow;
@@ -44,7 +44,6 @@ public class BattleshipView {
 		this.opponentPlayerNick = opponentNick;
 		this.client = client;
 		this.battleshipManagement = battleshipManagement;
-		loadMainScreenFXMLLoaderAndController();
 	}
 
 	private void loadMainScreenFXMLLoaderAndController() {
@@ -53,19 +52,29 @@ public class BattleshipView {
 		try {
 			vBoxMainScreen = mainScreenLoader.load();
 		} catch (Exception e) {
+			System.out.println("NIE WCZYTANO VBOX " + e);
+
 		}
 		mainScreenController = mainScreenLoader.getController();
 		mainScreenController.setClient(this.client);
 		mainScreenController.setOpponentPlayerNick(opponentPlayerNick);
+		mainScreenController.setNick(nick);
+		mainScreenController.setBattleshipManagement(battleshipManagement);
+		mainScreenController.initializeDataToAddedShips();
 	}
 
 	public void showBattleshipWindow() {
-		stageMainScreen = new Stage();
-		Scene scene = new Scene(vBoxMainScreen);
-		stageMainScreen.setTitle("Battleship: " + nick + " vs " + opponentPlayerNick);
-		stageMainScreen.setScene(scene);
 
-		stageMainScreen.show();
+		Platform.runLater(() -> {
+			loadMainScreenFXMLLoaderAndController();
+
+			stageMainScreen = new Stage();
+			Scene scene = new Scene(vBoxMainScreen);
+			stageMainScreen.setTitle("Battleship: " + nick + " vs " + opponentPlayerNick);
+			stageMainScreen.setScene(scene);
+
+			stageMainScreen.show();
+		});
 	}
 
 	public void showAddedShipsBattleshipWindow() {
@@ -97,6 +106,7 @@ public class BattleshipView {
 			Scene scene = new Scene(vBoxWaitingWindow);
 			stageWaitingWindows.setScene(scene);
 			waitingWindowController.setTextLabel(message);
+			waitingWindowController.setVisible(true);
 			stageWaitingWindows.show();
 		});
 	}
@@ -105,6 +115,10 @@ public class BattleshipView {
 		Platform.runLater(() -> {
 			stageWaitingWindows.close();
 		});
+	}
+
+	public WaitingWindowController getWaitingWindowController() {
+		return waitingWindowController;
 	}
 
 	private void loadAcceptanceWindow() {
@@ -138,11 +152,12 @@ public class BattleshipView {
 			stageAcceptanceWindow.close();
 		});
 	}
-	
+
 	private void loadInformationAndAcceptanceWindow() {
-		informationAndAcceptanceWindowLoader = new FXMLLoader(this.getClass().getResource("/fxml/battleship/InformationAndAcceptanceWindow.fxml"));
+		informationAndAcceptanceWindowLoader = new FXMLLoader(
+				this.getClass().getResource("/fxml/battleship/InformationAndAcceptanceWindow.fxml"));
 		vBoxInformationAndAcceptanceWindow = null;
-		
+
 		try {
 			vBoxInformationAndAcceptanceWindow = informationAndAcceptanceWindowLoader.load();
 		} catch (Exception e) {
@@ -150,12 +165,12 @@ public class BattleshipView {
 		informationAndAcceptanceController = informationAndAcceptanceWindowLoader.getController();
 		informationAndAcceptanceController.setBattleshipManagement(battleshipManagement);
 		informationAndAcceptanceController.setOpponentPlayerNick(opponentPlayerNick);
-		
+
 	}
-	
+
 	public void showInformationAndAcceptanceWindow(String message) {
 		loadInformationAndAcceptanceWindow();
-		
+
 		Platform.runLater(() -> {
 			stageInformationAndAcceptanceWindow = new Stage();
 			Scene scene = new Scene(vBoxInformationAndAcceptanceWindow);
@@ -164,7 +179,7 @@ public class BattleshipView {
 			stageInformationAndAcceptanceWindow.show();
 		});
 	}
-	
+
 	public void closeInformationAndAcceptanceWindow() {
 		Platform.runLater(() -> {
 			stageInformationAndAcceptanceWindow.close();

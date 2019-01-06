@@ -32,7 +32,7 @@ public class MessagesManagement {
 		this.actualInterlocutor = "";
 		this.interlocutorsManager = new InterlocutorsManager();
 		this.generalChat = new GeneralChat();
-		this.battleshipManagement = new BattleshipManagement(client);
+		this.battleshipManagement = new BattleshipManagement(client, nick);
 	}
 
 	public void receiveTheObject(Object object) {

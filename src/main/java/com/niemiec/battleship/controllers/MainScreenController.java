@@ -1,5 +1,10 @@
 package com.niemiec.battleship.controllers;
 
+import com.niemiec.battleship.game.logic.AddShips;
+import com.niemiec.battleship.game.logic.BorderManagement;
+import com.niemiec.battleship.game.objects.Player;
+import com.niemiec.battleship.game.objects.PlayerImpl;
+import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.objects.Client;
 
 //import com.niemiec.logic.BorderManagement;
@@ -626,12 +631,23 @@ public class MainScreenController {
 
 	private Client client;
 	private String opponentPlayerNick;
+	private String nick;
+
+	private AddShips addShips;
+	private Player player;
 //	private GameLogic gameLogic;
 //	private Exit exit;
 
+	private BattleshipManagement battleshipManagement;
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
 	@FXML
 	void initialize() {
-//		BorderManagement.setBorders(myBorder, opponentBorder);
+		BorderManagement.setBorders(myBorder, opponentBorder);
+
 //		gameLogic = Open.downloadDataFromSaveFile();
 //		if (gameLogic == null || !gameLogic.getSaveGame()) {
 //			gameLogic = new GameLogic(myBorder, opponentBorder);
@@ -644,11 +660,20 @@ public class MainScreenController {
 	}
 
 	public MainScreenController() {
+		
+	}
+	
+	public void initializeDataToAddedShips() {
+		addShips = new AddShips();
+		player = new PlayerImpl(Player.REAL_PLAYER, nick);
+		addShips.addOneRealPlayer(player);
 	}
 
 	@FXML
 	void myButtonAction(ActionEvent event) {
-//		gameLogic.addShips(event);
+		if (addShips.addShipsManually(Player.REAL_PLAYER, event)) {
+			battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
+		}
 	}
 
 	@FXML
@@ -670,10 +695,9 @@ public class MainScreenController {
 
 	@FXML
 	void setAutomaticallySpacingOfShips() {
-//		boolean auto = gameLogic.getAutomaticallySpacingOfShips();
-//		gameLogic.setAutomaticallySpacingOfShips(!auto);
-//
-//		gameLogic.startNewGameWithVirtualPlayer();
+		if (addShips.addShipsAutomatically(Player.REAL_PLAYER)) {
+			battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
+		}
 	}
 
 	@FXML
@@ -687,5 +711,9 @@ public class MainScreenController {
 
 	public void setOpponentPlayerNick(String opponentPlayerNick) {
 		this.opponentPlayerNick = opponentPlayerNick;
+	}
+
+	public void setBattleshipManagement(BattleshipManagement battleshipManagement) {
+		this.battleshipManagement = battleshipManagement;
 	}
 }
