@@ -19,9 +19,8 @@ public class BattleshipGame implements Serializable {
 	private String invitingPlayerNick;
 	private String opponentPlayerNick;
 	
-	private Player[] players;
-	private String nicks[];
-	private int tourn;
+	private Player player;
+	private String nickWhoseTourn;
 
 	private Player invitingPlayer;
 	private Player opponentPlayer;
@@ -35,7 +34,6 @@ public class BattleshipGame implements Serializable {
 		this.invitingPlayerNick = invitingPlayerNick;
 		this.opponentPlayerNick = opponentPlayerNick;
 		gameStatus = GAME_PROPOSAL;
-		players = new PlayerImpl[2];
 	}
 
 	public String getOpponentPlayerNick() {
@@ -100,28 +98,20 @@ public class BattleshipGame implements Serializable {
 	public void setOpponentPlayer(Player opponentPlayer) {
 		this.opponentPlayer = opponentPlayer;
 	}
+	
+	public void setNickWhoseTourn(String nickWhoseTourn) {
+		this.nickWhoseTourn = nickWhoseTourn;
+	}
+	
+	public String getNickWhoseTourn() {
+		return nickWhoseTourn;
+	}
 
-	public void setWhoseTourn(int tourn) {
-		this.tourn = tourn;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
-	public void setNicks(String[] nicks) {
-		this.nicks = nicks;
-	}
-
-	public void setPlayers(Player a, Player b) {
-		players[0] = a;
-		players[1] = b;
-	}
-	
-	public String getWhoseTourn() {
-		return nicks[tourn];
-	}
-	
-	public Player getPlayer(String nick) {
-		if (nicks[0].equals(nick))
-			return players[0];
-		else
-			return players[1];
+	public Player getPlayer() {
+		return player;
 	}
 }

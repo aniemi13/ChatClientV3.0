@@ -34,9 +34,9 @@ public class BattleshipManagement {
 		case BattleshipGame.START_THE_GAME:
 			receiveStartTheGame(battleshipGame);
 			break;
-		case BattleshipGame.UPDATE_BATTLESHIPGAME:
-			receiveUpdateBattleshipGame(battleshipGame);
-			break;
+//		case BattleshipGame.UPDATE_BATTLESHIPGAME:
+//			receiveUpdateBattleshipGame(battleshipGame);
+//			break;
 		}
 	}
 
@@ -68,19 +68,15 @@ public class BattleshipManagement {
 	}
 
 	private void receiveStartTheGame(BattleshipGame battleshipGame) {
-			if (battleshipGame.getWhoseTourn().equals(nick)) {
-				BorderManagement.setBordersToStartShot();
-			}
+		updateBorder(battleshipGame);
+		if (battleshipGame.getNickWhoseTourn().equals(nick)) {
+			BorderManagement.setBordersToStartShot();
+		}
 	}
 
 	private void updateBorder(BattleshipGame battleshipGame) {
-		BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer(nick));
-		BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer(nick));
-	}
-
-	private void receiveUpdateBattleshipGame(BattleshipGame battleshipGame) {
-		// TODO Auto-generated method stub
-
+		BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer());
+		BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
 	}
 
 	public Object playBattleship(String nick, String opponentPlayerNick) {
