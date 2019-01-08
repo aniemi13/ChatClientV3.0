@@ -1,5 +1,6 @@
 package com.niemiec.chat.objects;
 
+import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.connection.Connection;
 import com.niemiec.chat.controllers.ChatController;
@@ -66,6 +67,10 @@ public class Client {
 
 	public void acceptTheBattleshipGame(boolean isAccept, String opponentPlayerNick) {
 		connection.sendTheObject(messagesManagement.sendAcceptTheBattleshipGame(isAccept, opponentPlayerNick));
+	}
+
+	public void sendShipsAdded(String opponentPlayerNick, Player player) {
+		connection.sendTheObject(messagesManagement.sendShipsAdded(opponentPlayerNick, player));
 	}
 
 }

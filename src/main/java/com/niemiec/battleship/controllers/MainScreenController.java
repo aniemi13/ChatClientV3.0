@@ -7,6 +7,8 @@ import com.niemiec.battleship.game.objects.PlayerImpl;
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.objects.Client;
 
+import javafx.application.Platform;
+
 //import com.niemiec.logic.BorderManagement;
 //import com.niemiec.logic.Exit;
 //import com.niemiec.logic.GameLogic;
@@ -660,9 +662,9 @@ public class MainScreenController {
 	}
 
 	public MainScreenController() {
-		
+
 	}
-	
+
 	public void initializeDataToAddedShips() {
 		addShips = new AddShips();
 		player = new PlayerImpl(Player.REAL_PLAYER, nick);
@@ -672,7 +674,10 @@ public class MainScreenController {
 	@FXML
 	void myButtonAction(ActionEvent event) {
 		if (addShips.addShipsManually(Player.REAL_PLAYER, event)) {
-			battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
+			client.sendShipsAdded(opponentPlayerNick, player);
+			Platform.runLater(() -> {
+				BorderManagement.setBordersToEndGame();
+			});
 		}
 	}
 
@@ -696,7 +701,10 @@ public class MainScreenController {
 	@FXML
 	void setAutomaticallySpacingOfShips() {
 		if (addShips.addShipsAutomatically(Player.REAL_PLAYER)) {
-			battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
+			client.sendShipsAdded(opponentPlayerNick, player);
+			Platform.runLater(() -> {
+				BorderManagement.setBordersToEndGame();
+			});
 		}
 	}
 

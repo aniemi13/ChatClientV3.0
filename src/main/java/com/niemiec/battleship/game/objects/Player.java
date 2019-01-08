@@ -4,6 +4,8 @@ public interface Player {
 	public final static int VIRTUAL_PLAYER = 0;
 	public final static int REAL_PLAYER = 1;
 	
+	public String getNick();
+	
 	public Board getBoard();
 	public Board getOpponentBoard();
 	

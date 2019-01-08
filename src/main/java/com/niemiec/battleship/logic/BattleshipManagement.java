@@ -1,6 +1,5 @@
 package com.niemiec.battleship.logic;
 
-import com.niemiec.battleship.game.logic.AddShips;
 import com.niemiec.battleship.game.logic.BorderManagement;
 import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.manager.BattleshipGame;
@@ -10,16 +9,14 @@ import com.niemiec.chat.objects.Client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.scene.layout.VBox;
 
 public class BattleshipManagement {
 	private Client client;
 	private String nick;
 	private BattleshipGamesManager battleshipGamesManager;
 
-	public BattleshipManagement(Client client, String nick) {
+	public BattleshipManagement(Client client) {
 		this.client = client;
-		this.nick = nick;
 		this.battleshipGamesManager = new BattleshipGamesManager();
 	}
 
@@ -71,8 +68,14 @@ public class BattleshipManagement {
 	}
 
 	private void receiveStartTheGame(BattleshipGame battleshipGame) {
-		// TODO Auto-generated method stub
+			if (battleshipGame.getWhoseTourn().equals(nick)) {
+				BorderManagement.setBordersToStartShot();
+			}
+	}
 
+	private void updateBorder(BattleshipGame battleshipGame) {
+		BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer(nick));
+		BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer(nick));
 	}
 
 	private void receiveUpdateBattleshipGame(BattleshipGame battleshipGame) {
@@ -114,8 +117,15 @@ public class BattleshipManagement {
 		battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
 	}
 
-	public void sendShipsAdded(String opponentPlayerNick, Player player) {
-		// TODO Auto-generated method stub
+	public Object sendShipsAdded(String opponentPlayerNick, Player player) {
+		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		battleshipGame.setGameStatus(BattleshipGame.SHIPS_ADDED);
+		battleshipGame.setInvitingPlayer(player);
 
+		return battleshipGame;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 }

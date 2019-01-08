@@ -2,6 +2,7 @@ package com.niemiec.chat.logic;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.battleship.manager.BattleshipGame;
 import com.niemiec.chat.controllers.ChatController;
@@ -32,7 +33,7 @@ public class MessagesManagement {
 		this.actualInterlocutor = "";
 		this.interlocutorsManager = new InterlocutorsManager();
 		this.generalChat = new GeneralChat();
-		this.battleshipManagement = new BattleshipManagement(client, nick);
+		this.battleshipManagement = new BattleshipManagement(client);
 	}
 
 	public void receiveTheObject(Object object) {
@@ -139,6 +140,7 @@ public class MessagesManagement {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+		battleshipManagement.setNick(nick);
 	}
 
 	public Object sendReadyToWork() {
@@ -175,5 +177,9 @@ public class MessagesManagement {
 
 	public boolean whetherTheBattleshipGameExists() {
 		return battleshipManagement.whetherTheBattleshipGameExists(actualInterlocutor);
+	}
+
+	public Object sendShipsAdded(String opponentPlayerNick, Player player) {
+		return battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
 	}
 }

@@ -3,6 +3,7 @@ package com.niemiec.battleship.manager;
 import java.io.Serializable;
 
 import com.niemiec.battleship.game.objects.Coordinates;
+import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.game.objects.PlayerImpl;
 
 @SuppressWarnings("serial")
@@ -18,8 +19,12 @@ public class BattleshipGame implements Serializable {
 	private String invitingPlayerNick;
 	private String opponentPlayerNick;
 	
-	private PlayerImpl invitingPlayer;
-	private PlayerImpl opponentPlayer;
+	private Player[] players;
+	private String nicks[];
+	private int tourn;
+
+	private Player invitingPlayer;
+	private Player opponentPlayer;
 	
 	private Coordinates shotCoordinates;
 	
@@ -30,6 +35,7 @@ public class BattleshipGame implements Serializable {
 		this.invitingPlayerNick = invitingPlayerNick;
 		this.opponentPlayerNick = opponentPlayerNick;
 		gameStatus = GAME_PROPOSAL;
+		players = new PlayerImpl[2];
 	}
 
 	public String getOpponentPlayerNick() {
@@ -38,6 +44,14 @@ public class BattleshipGame implements Serializable {
 	
 	public String getInvitingPlayerNick() {
 		return invitingPlayerNick;
+	}
+	
+	public void setInvitingPlayerNick(String invitingPlayerNick) {
+		this.invitingPlayerNick = invitingPlayerNick;
+	}
+
+	public void setOpponentPlayerNick(String opponentPlayerNick) {
+		this.opponentPlayerNick = opponentPlayerNick;
 	}
 
 	public void delete() {
@@ -66,24 +80,48 @@ public class BattleshipGame implements Serializable {
 		invitingPlayerNick =  new String(opponentPlayerNick);
 		opponentPlayerNick = a;
 		
-		PlayerImpl p = invitingPlayer;
+		Player p = invitingPlayer;
 		invitingPlayer = opponentPlayer;
 		opponentPlayer = p;
 	}
 
-	public PlayerImpl getInvitingPlayer() {
+	public Player getInvitingPlayer() {
 		return invitingPlayer;
 	}
 
-	public void setInvitingPlayer(PlayerImpl invitingPlayer) {
+	public void setInvitingPlayer(Player invitingPlayer) {
 		this.invitingPlayer = invitingPlayer;
 	}
 
-	public PlayerImpl getOpponentPlayer() {
+	public Player getOpponentPlayer() {
 		return opponentPlayer;
 	}
 
-	public void setOpponentPlayer(PlayerImpl opponentPlayer) {
+	public void setOpponentPlayer(Player opponentPlayer) {
 		this.opponentPlayer = opponentPlayer;
+	}
+
+	public void setWhoseTourn(int tourn) {
+		this.tourn = tourn;
+	}
+	
+	public void setNicks(String[] nicks) {
+		this.nicks = nicks;
+	}
+
+	public void setPlayers(Player a, Player b) {
+		players[0] = a;
+		players[1] = b;
+	}
+	
+	public String getWhoseTourn() {
+		return nicks[tourn];
+	}
+	
+	public Player getPlayer(String nick) {
+		if (nicks[0].equals(nick))
+			return players[0];
+		else
+			return players[1];
 	}
 }
