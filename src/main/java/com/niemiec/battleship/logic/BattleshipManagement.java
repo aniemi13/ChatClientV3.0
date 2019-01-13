@@ -1,6 +1,9 @@
 package com.niemiec.battleship.logic;
 
+import com.niemiec.battleship.game.data.check.CheckData;
 import com.niemiec.battleship.game.logic.BorderManagement;
+import com.niemiec.battleship.game.objects.Board;
+import com.niemiec.battleship.game.objects.Coordinates;
 import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.manager.BattleshipGame;
 import com.niemiec.battleship.manager.BattleshipGamesManager;
@@ -9,6 +12,7 @@ import com.niemiec.chat.objects.Client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 
 public class BattleshipManagement {
 	private Client client;
@@ -69,14 +73,18 @@ public class BattleshipManagement {
 
 	private void receiveStartTheGame(BattleshipGame battleshipGame) {
 		updateBorder(battleshipGame);
+		battleshipGamesManager.updateBattleshipGame(battleshipGame);
+//		battleshipGame.getPlayer().getOpponentBoard().viewBoard();
 		if (battleshipGame.getNickWhoseTourn().equals(nick)) {
 			BorderManagement.setBordersToStartShot();
 		}
 	}
 
 	private void updateBorder(BattleshipGame battleshipGame) {
-		BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer());
-		BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
+		Platform.runLater(() -> {
+			BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer());
+			BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
+		});
 	}
 
 	public Object playBattleship(String nick, String opponentPlayerNick) {
@@ -88,8 +96,14 @@ public class BattleshipManagement {
 	}
 
 	public Object sendBattleshipGame(String opponentPlayerNick, ActionEvent event) {
-		// TODO Auto-generated method stub
-		return null;
+		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		Coordinates coordinates = CheckData.getCoordinatesFromButton((Button) event.getSource());
+		battleshipGame.setCoordinates(coordinates);
+		BorderManagement.setBordersToEndGame();
+
+//		battleshipGame.getPlayer().getBoard().viewBoard();
+		System.out.println(battleshipGame.getPlayer().getNick());
+		return battleshipGame;
 	}
 
 	public Object sendAcceptTheBattleshipGame(boolean isAccept, String opponentPlayerNick) {
@@ -123,5 +137,16 @@ public class BattleshipManagement {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+	}
+
+	public boolean checkIfTheButtonWasUsed(String opponentPlayerNick, ActionEvent event) {
+		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		Coordinates coordinates = CheckData.getCoordinatesFromButton((Button) event.getSource());
+
+		int box = battleshipGame.getPlayer().getOpponentBoard().getBox(coordinates);
+		if (box == Board.BOX_EMPTY)
+			return false;
+		else
+			return true;
 	}
 }

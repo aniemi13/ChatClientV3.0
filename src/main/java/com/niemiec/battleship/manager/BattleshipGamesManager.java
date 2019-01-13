@@ -68,8 +68,10 @@ public class BattleshipGamesManager {
 
 	public void updateBattleshipGame(BattleshipGame battleshipGame) {
 		for (int i = 0; i < opponentPlayers.size(); i++) {
+
 			if (opponentPlayers.get(i).equals(battleshipGame.getOpponentPlayerNick())) {
-				battleshipGames.set(i, battleshipGame);
+				battleshipGames.add(i, battleshipGame);
+				return;
 			}
 		}
 	}

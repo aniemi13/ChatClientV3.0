@@ -8,7 +8,6 @@ import com.niemiec.battleship.game.objects.Board;
 import com.niemiec.battleship.game.objects.Coordinates;
 import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.game.objects.Ship;
-import com.niemiec.battleship.manager.BattleshipGamesManager;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -33,13 +32,13 @@ public class AddShips implements Serializable {
 	
 	public void addOneRealPlayer(Player realPlayer) {
 		players = new Player[2];
-		players[Player.REAL_PLAYER] = realPlayer;
+		players[Player.SECOND_PLAYER] = realPlayer;
 	}
 
 	public void addPlayers(Player realPlayer, Player virtualPlayer) {
 		players = new Player[2];
-		players[Player.REAL_PLAYER] = realPlayer;
-		players[Player.VIRTUAL_PLAYER] = virtualPlayer;
+		players[Player.SECOND_PLAYER] = realPlayer;
+		players[Player.FIRST_PLAYER] = virtualPlayer;
 	}
 
 	public boolean addShipsManually(int typeOfPlayer, ActionEvent event) {
@@ -149,7 +148,7 @@ public class AddShips implements Serializable {
 		this.currentShip = getCurrentShip();
 		this.ship = new Ship(getActualNumberOfMasts());
 		this.currentMast = 0;
-		this.actualPlayer = Player.VIRTUAL_PLAYER;
+		this.actualPlayer = Player.FIRST_PLAYER;
 	}
 
 	private void updateCurrentShipAndCurrentQuantityShipsOfGivenType() {

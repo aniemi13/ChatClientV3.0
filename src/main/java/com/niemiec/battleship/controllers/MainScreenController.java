@@ -667,13 +667,13 @@ public class MainScreenController {
 
 	public void initializeDataToAddedShips() {
 		addShips = new AddShips();
-		player = new PlayerImpl(Player.REAL_PLAYER, nick);
+		player = new PlayerImpl(Player.SECOND_PLAYER, nick);
 		addShips.addOneRealPlayer(player);
 	}
 
 	@FXML
 	void myButtonAction(ActionEvent event) {
-		if (addShips.addShipsManually(Player.REAL_PLAYER, event)) {
+		if (addShips.addShipsManually(Player.SECOND_PLAYER, event)) {
 			client.sendShipsAdded(opponentPlayerNick, player);
 			Platform.runLater(() -> {
 				BorderManagement.setBordersToEndGame();
@@ -684,7 +684,9 @@ public class MainScreenController {
 	@FXML
 	void opponentButtonAction(ActionEvent event) {
 //		gameLogic.shot(event);
-		client.sendBattleshipGame(opponentPlayerNick, event);
+		if (!client.checkIfTheButtonWasUsed(opponentPlayerNick, event)) {
+			client.sendBattleshipGame(opponentPlayerNick, event);
+		}
 	}
 
 	@FXML
@@ -700,7 +702,7 @@ public class MainScreenController {
 
 	@FXML
 	void setAutomaticallySpacingOfShips() {
-		if (addShips.addShipsAutomatically(Player.REAL_PLAYER)) {
+		if (addShips.addShipsAutomatically(Player.SECOND_PLAYER)) {
 			client.sendShipsAdded(opponentPlayerNick, player);
 			Platform.runLater(() -> {
 				BorderManagement.setBordersToEndGame();

@@ -6,7 +6,7 @@ import java.io.Serializable;
 //W grze pole 1,1 to w tablicy 0,0
 //Board - tablica
 @SuppressWarnings("serial")
-public class Board implements Serializable {
+public class Board implements Serializable, Cloneable {
 	public static final int BOX_EMPTY = 0;
 	public static final int BOX_NOT_HIT = 1;
 	public static final int BOX_SHIP = 2;
@@ -64,5 +64,20 @@ public class Board implements Serializable {
 			System.out.println("");
 		}
 		System.out.println("");
+	}
+	
+	private void setBoxes(int[][] boxes) {
+		for (int i = 0; i < boxes.length; i++) {
+			for (int j = 0; j < boxes[i].length; j++) {
+				this.boxes[i][j] = boxes[i][j];
+			}
+		}
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Board b = new Board();
+		b.setBoxes(boxes.clone());
+		return b;
 	}
 }

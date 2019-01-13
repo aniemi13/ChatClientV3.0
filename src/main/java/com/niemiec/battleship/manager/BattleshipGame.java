@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import com.niemiec.battleship.game.objects.Coordinates;
 import com.niemiec.battleship.game.objects.Player;
-import com.niemiec.battleship.game.objects.PlayerImpl;
 
 @SuppressWarnings("serial")
 public class BattleshipGame implements Serializable {
@@ -14,7 +13,7 @@ public class BattleshipGame implements Serializable {
 	public static final int ADD_SHIPS = 13;
 	public static final int SHIPS_ADDED = 14; //tej informacji będzie potrzebował tylko serwer
 	public static final int START_THE_GAME = 15;
-	public static final int UPDATE_BATTLESHIPGAME = 16;
+	public static final int END_GAME = 16;
 	
 	private String invitingPlayerNick;
 	private String opponentPlayerNick;
@@ -113,5 +112,13 @@ public class BattleshipGame implements Serializable {
 	
 	public Player getPlayer() {
 		return player;
+	}
+
+	public void setCoordinates(Coordinates coordinates) {
+		this.shotCoordinates = coordinates;
+	}
+	
+	public Coordinates getCoordinates() {
+		return shotCoordinates;
 	}
 }

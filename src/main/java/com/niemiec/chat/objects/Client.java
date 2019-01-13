@@ -1,7 +1,6 @@
 package com.niemiec.chat.objects;
 
 import com.niemiec.battleship.game.objects.Player;
-import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.connection.Connection;
 import com.niemiec.chat.controllers.ChatController;
 import com.niemiec.chat.controllers.GetNickController;
@@ -71,6 +70,10 @@ public class Client {
 
 	public void sendShipsAdded(String opponentPlayerNick, Player player) {
 		connection.sendTheObject(messagesManagement.sendShipsAdded(opponentPlayerNick, player));
+	}
+
+	public boolean checkIfTheButtonWasUsed(String opponentPlayerNick, ActionEvent event) {
+		return messagesManagement.checkIfTheButtonWasUsed(opponentPlayerNick, event);
 	}
 
 }

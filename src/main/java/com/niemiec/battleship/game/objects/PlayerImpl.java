@@ -3,8 +3,9 @@ package com.niemiec.battleship.game.objects;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class PlayerImpl implements Player, Serializable {
+public class PlayerImpl implements Player, Serializable, Cloneable {
 	private String nick;
+
 	public String getNick() {
 		return nick;
 	}
@@ -32,7 +33,7 @@ public class PlayerImpl implements Player, Serializable {
 	public void resetHitData() {
 		onHit = false;
 		coordinatesOnHit = new Coordinates();
-		directionOnHit = Ship.SHIP_DIRECTION_NO_SPACE; 
+		directionOnHit = Ship.SHIP_DIRECTION_NO_SPACE;
 	}
 
 	public Board getBoard() {
@@ -61,12 +62,12 @@ public class PlayerImpl implements Player, Serializable {
 
 	@Override
 	public boolean isVirtualPlayer() {
-		return (typeOfPlayer == Player.VIRTUAL_PLAYER) ? true : false;
+		return (typeOfPlayer == Player.FIRST_PLAYER) ? true : false;
 	}
 
 	@Override
 	public boolean getInformationInThePlayerIsVirtual() {
-		if (typeOfPlayer == Player.VIRTUAL_PLAYER)
+		if (typeOfPlayer == Player.FIRST_PLAYER)
 			return true;
 		return false;
 	}
@@ -75,7 +76,7 @@ public class PlayerImpl implements Player, Serializable {
 		onHit = true;
 		coordinatesOnHit = new Coordinates(coordinates);
 	}
-	
+
 	public boolean isOnHit() {
 		return onHit;
 	}
@@ -87,9 +88,37 @@ public class PlayerImpl implements Player, Serializable {
 	public void setDirectionOnHit(int directionOnHit) {
 		this.directionOnHit = directionOnHit;
 	}
-	
+
 	public Coordinates getCoordinatesOnHit() {
 		return this.coordinatesOnHit;
 	}
 
+	@Override
+	public Object clone() {
+		PlayerImpl playerImpl = new PlayerImpl(this.typeOfPlayer, this.nick);
+		try {
+			playerImpl.setBoard(board.clone());
+			playerImpl.setOpponentBoard(opponentBoard.clone());
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		playerImpl.setSunkenShips(sunkenShips);
+//		private CollectionShips collectionShips;
+//		private boolean onHit;
+//		private Coordinates coordinatesOnHit;
+//		private int directionOnHit;
+		return playerImpl;
+	}
+
+	private void setSunkenShips(int sunkenShips2) {
+		this.sunkenShips = sunkenShips2;
+	}
+
+	private void setOpponentBoard(Object clone) {
+		this.opponentBoard = (Board) clone;
+	}
+
+	private void setBoard(Object clone) {
+		this.board = (Board) clone;
+	}
 }

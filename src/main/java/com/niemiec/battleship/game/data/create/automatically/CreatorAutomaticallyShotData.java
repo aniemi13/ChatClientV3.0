@@ -179,7 +179,7 @@ public class CreatorAutomaticallyShotData extends CreatorAutomaticallyData {
 	}
 
 	private int getIndexOpponentPlayer(int activePlayer) {
-		return (activePlayer == Player.REAL_PLAYER) ? Player.VIRTUAL_PLAYER : Player.REAL_PLAYER;
+		return (activePlayer == Player.SECOND_PLAYER) ? Player.FIRST_PLAYER : Player.SECOND_PLAYER;
 	}
 
 	private int getBoxFromPlayerBoard(Coordinates coordinates, int typeOfPlayer) {

@@ -1,7 +1,5 @@
 package com.niemiec.chat.logic;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.battleship.manager.BattleshipGame;
@@ -181,5 +179,9 @@ public class MessagesManagement {
 
 	public Object sendShipsAdded(String opponentPlayerNick, Player player) {
 		return battleshipManagement.sendShipsAdded(opponentPlayerNick, player);
+	}
+
+	public boolean checkIfTheButtonWasUsed(String opponentPlayerNick, ActionEvent event) {
+		return battleshipManagement.checkIfTheButtonWasUsed(opponentPlayerNick, event);
 	}
 }
