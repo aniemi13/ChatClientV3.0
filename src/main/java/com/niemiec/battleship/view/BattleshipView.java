@@ -2,6 +2,7 @@ package com.niemiec.battleship.view;
 
 import com.niemiec.battleship.controllers.MainScreenController;
 import com.niemiec.battleship.controllers.AcceptanceWindowController;
+import com.niemiec.battleship.controllers.EndGameInformationAndAcceptanceController;
 import com.niemiec.battleship.controllers.InformationAndAcceptanceController;
 import com.niemiec.battleship.controllers.WaitingWindowController;
 import com.niemiec.battleship.logic.BattleshipManagement;
@@ -39,6 +40,11 @@ public class BattleshipView {
 	private VBox vBoxInformationAndAcceptanceWindow;
 	private Stage stageInformationAndAcceptanceWindow;
 
+	private FXMLLoader endGameInformationAndAcceptanceWindowLoader;
+	private EndGameInformationAndAcceptanceController endGameInformationAndAcceptanceController;
+	private VBox vBoxEndGameInformationAndAcceptanceWindow;
+	private Stage stageEndGameInformationAndAcceptanceWindow;
+
 	public BattleshipView(String nick, String opponentNick, Client client, BattleshipManagement battleshipManagement) {
 		this.nick = nick;
 		this.opponentPlayerNick = opponentNick;
@@ -70,7 +76,7 @@ public class BattleshipView {
 
 			stageMainScreen = new Stage();
 			Scene scene = new Scene(vBoxMainScreen);
-			stageMainScreen.setTitle("Battleship: " + nick + " vs " + opponentPlayerNick);
+			stageMainScreen.setTitle("Battleship: TY " + " vs " + opponentPlayerNick);
 			stageMainScreen.setScene(scene);
 
 			stageMainScreen.show();
@@ -106,7 +112,6 @@ public class BattleshipView {
 			Scene scene = new Scene(vBoxWaitingWindow);
 			stageWaitingWindows.setScene(scene);
 			waitingWindowController.setTextLabel(message);
-			waitingWindowController.setVisible(true);
 			stageWaitingWindows.show();
 		});
 	}
@@ -129,7 +134,6 @@ public class BattleshipView {
 		} catch (Exception e) {
 		}
 		acceptanceWindowController = acceptanceWindowLoader.getController();
-		acceptanceWindowController.setBattleshipManagement(battleshipManagement);
 		acceptanceWindowController.setClient(client);
 		acceptanceWindowController.setOpponentPlayerNick(opponentPlayerNick);
 	}
@@ -183,6 +187,38 @@ public class BattleshipView {
 	public void closeInformationAndAcceptanceWindow() {
 		Platform.runLater(() -> {
 			stageInformationAndAcceptanceWindow.close();
+		});
+	}
+
+	private void loadEndGameInformationAndAcceptanceWindow() {
+		endGameInformationAndAcceptanceWindowLoader = new FXMLLoader(
+				this.getClass().getResource("/fxml/battleship/EndGameInformationAndAcceptanceWindow.fxml"));
+		vBoxEndGameInformationAndAcceptanceWindow = null;
+
+		try {
+			vBoxEndGameInformationAndAcceptanceWindow = endGameInformationAndAcceptanceWindowLoader.load();
+		} catch (Exception e) {
+		}
+		endGameInformationAndAcceptanceController = endGameInformationAndAcceptanceWindowLoader.getController();
+		endGameInformationAndAcceptanceController.setBattleshipManagement(battleshipManagement);
+		endGameInformationAndAcceptanceController.setOpponentPlayerNick(opponentPlayerNick);
+	}
+
+	public void showEndGameInformationAndAcceptanceWindow(String message) {
+		Platform.runLater(() -> {
+			loadEndGameInformationAndAcceptanceWindow();
+
+			stageEndGameInformationAndAcceptanceWindow = new Stage();
+			Scene scene = new Scene(vBoxEndGameInformationAndAcceptanceWindow);
+			stageEndGameInformationAndAcceptanceWindow.setScene(scene);
+			endGameInformationAndAcceptanceController.setTextLabel(message);
+			stageEndGameInformationAndAcceptanceWindow.show();
+		});
+	}
+
+	public void closeEndGameInformationAndAcceptanceWindow() {
+		Platform.runLater(() -> {
+			stageEndGameInformationAndAcceptanceWindow.close();
 		});
 	}
 

@@ -1,7 +1,6 @@
 package com.niemiec.battleship.controllers;
 
 import com.niemiec.battleship.game.logic.AddShips;
-import com.niemiec.battleship.game.logic.BorderManagement;
 import com.niemiec.battleship.game.objects.Player;
 import com.niemiec.battleship.game.objects.PlayerImpl;
 import com.niemiec.battleship.logic.BattleshipManagement;
@@ -648,8 +647,6 @@ public class MainScreenController {
 
 	@FXML
 	void initialize() {
-		BorderManagement.setBorders(myBorder, opponentBorder);
-
 //		gameLogic = Open.downloadDataFromSaveFile();
 //		if (gameLogic == null || !gameLogic.getSaveGame()) {
 //			gameLogic = new GameLogic(myBorder, opponentBorder);
@@ -669,6 +666,7 @@ public class MainScreenController {
 		addShips = new AddShips();
 		player = new PlayerImpl(Player.SECOND_PLAYER, nick);
 		addShips.addOneRealPlayer(player);
+		addShips.addBorderManagement(battleshipManagement.getBorderManagement(opponentPlayerNick));
 	}
 
 	@FXML
@@ -676,7 +674,7 @@ public class MainScreenController {
 		if (addShips.addShipsManually(Player.SECOND_PLAYER, event)) {
 			client.sendShipsAdded(opponentPlayerNick, player);
 			Platform.runLater(() -> {
-				BorderManagement.setBordersToEndGame();
+				battleshipManagement.getBorderManagement(opponentPlayerNick).setBordersToEndGame();
 			});
 		}
 	}
@@ -705,7 +703,7 @@ public class MainScreenController {
 		if (addShips.addShipsAutomatically(Player.SECOND_PLAYER)) {
 			client.sendShipsAdded(opponentPlayerNick, player);
 			Platform.runLater(() -> {
-				BorderManagement.setBordersToEndGame();
+				battleshipManagement.getBorderManagement(opponentPlayerNick).setBordersToEndGame();
 			});
 		}
 	}
@@ -725,5 +723,6 @@ public class MainScreenController {
 
 	public void setBattleshipManagement(BattleshipManagement battleshipManagement) {
 		this.battleshipManagement = battleshipManagement;
+		battleshipManagement.setBordersToBorderManagement(myBorder, opponentBorder, opponentPlayerNick);
 	}
 }

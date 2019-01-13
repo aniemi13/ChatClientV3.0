@@ -13,6 +13,7 @@ import com.niemiec.chat.objects.Client;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
 public class BattleshipManagement {
 	private Client client;
@@ -38,10 +39,18 @@ public class BattleshipManagement {
 		case BattleshipGame.START_THE_GAME:
 			receiveStartTheGame(battleshipGame);
 			break;
-//		case BattleshipGame.UPDATE_BATTLESHIPGAME:
-//			receiveUpdateBattleshipGame(battleshipGame);
-//			break;
+		case BattleshipGame.END_GAME:
+			receiveEndGame(battleshipGame);
+			break;
 		}
+	}
+
+	private void receiveEndGame(BattleshipGame battleshipGame) {
+		updateBorder(battleshipGame);
+		battleshipGamesManager.updateBattleshipGame(battleshipGame);
+		battleshipGamesManager.getBorderManagement(battleshipGame).setBordersToEndGame();
+		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(battleshipGame.getOpponentPlayerNick());
+		battleshipView.showEndGameInformationAndAcceptanceWindow("Wygrywa gracz: " + battleshipGame.getWinner());
 	}
 
 	private void receiveGameProposal(BattleshipGame battleshipGame) {
@@ -67,23 +76,23 @@ public class BattleshipManagement {
 			battleshipView.closeWaitingWindow();
 		battleshipView.showBattleshipWindow();
 		Platform.runLater(() -> {
-			BorderManagement.startNewGameWithVirtualPlayer();
+			battleshipGamesManager.getBorderManagement(battleshipGame).startNewGameWithVirtualPlayer();
 		});
 	}
 
 	private void receiveStartTheGame(BattleshipGame battleshipGame) {
 		updateBorder(battleshipGame);
 		battleshipGamesManager.updateBattleshipGame(battleshipGame);
-//		battleshipGame.getPlayer().getOpponentBoard().viewBoard();
 		if (battleshipGame.getNickWhoseTourn().equals(nick)) {
-			BorderManagement.setBordersToStartShot();
+			battleshipGamesManager.getBorderManagement(battleshipGame).setBordersToStartShot();
 		}
 	}
 
 	private void updateBorder(BattleshipGame battleshipGame) {
+		BorderManagement b = battleshipGamesManager.getBorderManagement(battleshipGame);
 		Platform.runLater(() -> {
-			BorderManagement.drawBoardInMyBorder(battleshipGame.getPlayer());
-			BorderManagement.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
+			b.drawBoardInMyBorder(battleshipGame.getPlayer());
+			b.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
 		});
 	}
 
@@ -99,10 +108,8 @@ public class BattleshipManagement {
 		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
 		Coordinates coordinates = CheckData.getCoordinatesFromButton((Button) event.getSource());
 		battleshipGame.setCoordinates(coordinates);
-		BorderManagement.setBordersToEndGame();
+		getBorderManagement(opponentPlayerNick).setBordersToEndGame();
 
-//		battleshipGame.getPlayer().getBoard().viewBoard();
-		System.out.println(battleshipGame.getPlayer().getNick());
 		return battleshipGame;
 	}
 
@@ -148,5 +155,20 @@ public class BattleshipManagement {
 			return false;
 		else
 			return true;
+	}
+
+	public void acceptEndGame(String opponentPlayerNick) {
+		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
+		battleshipView.closeBattleshipWindow();
+		battleshipView.closeEndGameInformationAndAcceptanceWindow();
+		battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
+	}
+
+	public void setBordersToBorderManagement(VBox myBorder, VBox opponentBorder, String opponentPlayerNick) {
+		battleshipGamesManager.getBorderManagement(opponentPlayerNick).setBorders(myBorder, opponentBorder);
+	}
+	
+	public BorderManagement getBorderManagement(String opponentPlayerNick) {
+		return battleshipGamesManager.getBorderManagement(opponentPlayerNick);
 	}
 }

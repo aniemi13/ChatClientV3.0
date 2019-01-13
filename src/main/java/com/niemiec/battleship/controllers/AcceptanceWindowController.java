@@ -1,6 +1,5 @@
 package com.niemiec.battleship.controllers;
 
-import com.niemiec.battleship.logic.BattleshipManagement;
 import com.niemiec.chat.objects.Client;
 
 import javafx.event.ActionEvent;
@@ -18,7 +17,6 @@ public class AcceptanceWindowController {
 	@FXML
 	private Button rejectionButton;
 
-	private BattleshipManagement battleshipManagement;
 	private String opponentPlayerNick;
 	private Client client;
 
@@ -42,10 +40,6 @@ public class AcceptanceWindowController {
 
 	@FXML
 	void initialize() {
-	}
-
-	public void setBattleshipManagement(BattleshipManagement battleshipManagement) {
-		this.battleshipManagement = battleshipManagement;
 	}
 
 	public void setClient(Client client) {

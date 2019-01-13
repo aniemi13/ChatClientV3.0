@@ -28,6 +28,7 @@ public class BattleshipGame implements Serializable {
 	
 	private int gameStatus;
 	private int index; // numer Battleship w serwerze
+	private String winner;
 	
 	public BattleshipGame(String invitingPlayerNick, String opponentPlayerNick) {
 		this.invitingPlayerNick = invitingPlayerNick;
@@ -120,5 +121,13 @@ public class BattleshipGame implements Serializable {
 	
 	public Coordinates getCoordinates() {
 		return shotCoordinates;
+	}
+
+	public void setWinnerNick(String winner) {
+		this.winner = winner;
+	}
+
+	public String getWinner() {
+		return winner;
 	}
 }

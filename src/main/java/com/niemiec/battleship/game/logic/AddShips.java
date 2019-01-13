@@ -24,6 +24,7 @@ public class AddShips implements Serializable {
 	int currentMast;
 	Ship ship;
 	Coordinates coordinates;
+	private BorderManagement borderManagement;
 
 	public AddShips() {
 		setTheInitialConditions();
@@ -47,7 +48,7 @@ public class AddShips implements Serializable {
 		getCoordinatesFromButton((Button) event.getSource());
 		addShips();
 		
-		BorderManagement.drawBoardInMyBorder(players[typeOfPlayer]);
+		borderManagement.drawBoardInMyBorder(players[typeOfPlayer]);
 		
 		return conditionOfTheEndOfAddingShips();
 	}
@@ -59,7 +60,7 @@ public class AddShips implements Serializable {
 			coordinates = creatorAutomaticallyData.downloadCoordinatesWhenAddShip(ship, currentMast);
 			addShips();
 		}
-		BorderManagement.drawBoardInMyBorder(players[typeOfPlayer]);
+		borderManagement.drawBoardInMyBorder(players[typeOfPlayer]);
 		return true;
 	}
 
@@ -176,5 +177,9 @@ public class AddShips implements Serializable {
 
 	public Player getPlayer(int typeOfPlayer) {
 		return players[typeOfPlayer];
+	}
+
+	public void addBorderManagement(BorderManagement borderManagement) {
+		this.borderManagement = borderManagement;
 	}
 }
