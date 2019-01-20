@@ -2,7 +2,6 @@ package com.niemiec.battleship.controllers;
 
 import com.niemiec.battleship.logic.BattleshipManagement;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,7 +18,7 @@ public class InformationAndAcceptanceController {
     private String opponentPlayerNick;
 
     @FXML
-    void understand(ActionEvent event) {
+    public void understand() {
     	battleshipManagement.acceptRejectionGameProspalInformation(opponentPlayerNick);
     }
 

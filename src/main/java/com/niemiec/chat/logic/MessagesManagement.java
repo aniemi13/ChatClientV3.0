@@ -184,4 +184,16 @@ public class MessagesManagement {
 	public boolean checkIfTheButtonWasUsed(String opponentPlayerNick, ActionEvent event) {
 		return battleshipManagement.checkIfTheButtonWasUsed(opponentPlayerNick, event);
 	}
+
+	public boolean checkIfBattleshipGameHasBeenCompleted(String opponentPlayerNick) {
+		return battleshipManagement.checkIfBattleshipGameHasBeenCompleted(opponentPlayerNick);
+	}
+
+	public Object sendResignationFromTheGame(String opponentPlayerNick) {
+		return battleshipManagement.sendResignationFromTheGame(opponentPlayerNick);
+	}
+
+	public void closeBattleshipMainScreen(String opponentPlayerNick) {
+		battleshipManagement.closeBattleshipMainScreen(opponentPlayerNick);
+	}
 }

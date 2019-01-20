@@ -11,20 +11,20 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.niemiec.battleship.controllers.MainScreenController">
    <children>
-      <MenuBar>
+      <MenuBar fx:id="manuBar">
         <menus>
-          <Menu mnemonicParsing="false" text="Gra">
+          <Menu fx:id="gameMenu" mnemonicParsing="false" text="Gra">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#startGame" text="Nowa gra" />
               <MenuItem mnemonicParsing="false" onAction="#close" text="Zamknij" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Ustawienia">
+          <Menu fx:id="optionsMenu" mnemonicParsing="false" text="Ustawienia">
                <items>
                   <CheckMenuItem fx:id="automaticallySpacingOfShipsButton" mnemonicParsing="false" onAction="#setAutomaticallySpacingOfShips" text="Rozstawiaj statki automatycznie" />
                </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Pomoc">
+          <Menu fx:id="helpMenu" mnemonicParsing="false" text="Pomoc">
             <items>
               <MenuItem mnemonicParsing="false" text="O programie" />
             </items>

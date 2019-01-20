@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.VBox;
 
 public class MainScreenController {
@@ -629,6 +630,15 @@ public class MainScreenController {
 
 	@FXML
 	private CheckMenuItem automaticallySpacingOfShipsButton;
+	
+	@FXML
+	private Menu gameMenu;
+	
+	@FXML
+	private Menu optionsMenu;
+	
+	@FXML
+	private Menu helpMenu;
 
 	private Client client;
 	private String opponentPlayerNick;
@@ -647,15 +657,6 @@ public class MainScreenController {
 
 	@FXML
 	void initialize() {
-//		gameLogic = Open.downloadDataFromSaveFile();
-//		if (gameLogic == null || !gameLogic.getSaveGame()) {
-//			gameLogic = new GameLogic(myBorder, opponentBorder);
-//			startGame();
-//		} else {
-//			gameLogic.startGameAfterSave();
-//			automaticallySpacingOfShipsButton.setSelected(gameLogic.getAutomaticallySpacingOfShips());
-//		}
-		System.out.println(this);
 	}
 
 	public MainScreenController() {
@@ -681,21 +682,17 @@ public class MainScreenController {
 
 	@FXML
 	void opponentButtonAction(ActionEvent event) {
-//		gameLogic.shot(event);
 		if (!client.checkIfTheButtonWasUsed(opponentPlayerNick, event)) {
 			client.sendBattleshipGame(opponentPlayerNick, event);
 		}
 	}
 
 	@FXML
-	void close() {
-		System.out.println("Controller utworzony!");
-//		if (gameLogic.getTheGameWasStarted()) {
-//			exit = new Exit(gameLogic);
-//			exit.orClose();
-//		} else {
-//			System.exit(0);
-//		}
+	public void close() {
+		if (!client.checkIfBattleshipGameHasBeenCompleted(opponentPlayerNick)) {
+			client.sendResignationFromTheGame(opponentPlayerNick);
+		}
+		client.closeBattleshipMainScreen(opponentPlayerNick);
 	}
 
 	@FXML
@@ -724,5 +721,11 @@ public class MainScreenController {
 	public void setBattleshipManagement(BattleshipManagement battleshipManagement) {
 		this.battleshipManagement = battleshipManagement;
 		battleshipManagement.setBordersToBorderManagement(myBorder, opponentBorder, opponentPlayerNick);
+	}
+
+	public void setDisableMenu() {
+		gameMenu.setDisable(true);
+		optionsMenu.setDisable(true);
+		helpMenu.setDisable(true);
 	}
 }

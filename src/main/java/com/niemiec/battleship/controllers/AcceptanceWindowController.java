@@ -2,7 +2,6 @@ package com.niemiec.battleship.controllers;
 
 import com.niemiec.chat.objects.Client;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,12 +20,12 @@ public class AcceptanceWindowController {
 	private Client client;
 
 	@FXML
-	void accept(ActionEvent event) {
+	void accept() {
 		client.acceptTheBattleshipGame(true, opponentPlayerNick);
 	}
 
 	@FXML
-	void rejectionGameProposal(ActionEvent event) {
+	public void rejectionGameProposal() {
 		client.acceptTheBattleshipGame(false, opponentPlayerNick);
 	}
 

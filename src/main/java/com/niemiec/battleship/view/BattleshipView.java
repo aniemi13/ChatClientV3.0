@@ -147,6 +147,7 @@ public class BattleshipView {
 			stageAcceptanceWindow.setScene(scene);
 			acceptanceWindowController.setTextLabel("Otrzymałeś propozycję gry od użytkownika " + opponentPlayerNick);
 			acceptanceWindowController.setOpponentPlayerNick(opponentPlayerNick);
+			stageAcceptanceWindow.setOnCloseRequest(e -> acceptanceWindowController.rejectionGameProposal());
 			stageAcceptanceWindow.show();
 		});
 	}
@@ -180,6 +181,7 @@ public class BattleshipView {
 			Scene scene = new Scene(vBoxInformationAndAcceptanceWindow);
 			stageInformationAndAcceptanceWindow.setScene(scene);
 			informationAndAcceptanceController.setTextLabel(message);
+			stageInformationAndAcceptanceWindow.setOnCloseRequest(e -> informationAndAcceptanceController.understand());
 			stageInformationAndAcceptanceWindow.show();
 		});
 	}
@@ -213,6 +215,7 @@ public class BattleshipView {
 			stageEndGameInformationAndAcceptanceWindow.setScene(scene);
 			endGameInformationAndAcceptanceController.setTextLabel(message);
 			stageEndGameInformationAndAcceptanceWindow.show();
+			mainScreenController.setDisableMenu();
 		});
 	}
 

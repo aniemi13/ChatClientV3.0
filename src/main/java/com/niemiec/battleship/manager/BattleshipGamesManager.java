@@ -119,4 +119,13 @@ public class BattleshipGamesManager {
 		}
 		System.out.println("**************************************************************");
 	}
+
+
+	public boolean checkIfExist(String opponentPlayerNick) {
+		for (int i = 0; i < opponentPlayers.size(); i++) {
+			if (opponentPlayers.get(i).equals(opponentPlayerNick))
+				return true;
+		}
+		return false;
+	}
 }

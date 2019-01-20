@@ -46,19 +46,30 @@ public class BattleshipManagement {
 	}
 
 	private void receiveEndGame(BattleshipGame battleshipGame) {
+		System.out.println("Jestem graczem " + nick + ", a wygrał gracz: " + battleshipGame.getWinner());
 		updateBorder(battleshipGame);
 		battleshipGamesManager.updateBattleshipGame(battleshipGame);
 		battleshipGamesManager.getBorderManagement(battleshipGame).setBordersToEndGame();
-		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(battleshipGame.getOpponentPlayerNick());
+		BattleshipView battleshipView = battleshipGamesManager
+				.getBattleshipView(battleshipGame.getOpponentPlayerNick());
 		battleshipView.showEndGameInformationAndAcceptanceWindow("Wygrywa gracz: " + battleshipGame.getWinner());
 	}
 
 	private void receiveGameProposal(BattleshipGame battleshipGame) {
 		String nick = battleshipGame.getInvitingPlayerNick();
 		String opponentPlayerNick = battleshipGame.getOpponentPlayerNick();
+		deleteBattleshipGameIfExsistInformationController(opponentPlayerNick);
 		BattleshipView battleshipView = new BattleshipView(nick, opponentPlayerNick, client, this);
 		battleshipGamesManager.addBattleshipGame(battleshipGame, battleshipView);
 		battleshipView.showAcceptanceWindow();
+	}
+
+	private void deleteBattleshipGameIfExsistInformationController(String opponentPlayerNick) {
+		if (battleshipGamesManager.checkIfExist(opponentPlayerNick)) {
+			BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
+			battleshipView.closeInformationAndAcceptanceWindow();
+			battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
+		}
 	}
 
 	private void receiveRejectionGameProposal(BattleshipGame battleshipGame) {
@@ -90,10 +101,12 @@ public class BattleshipManagement {
 
 	private void updateBorder(BattleshipGame battleshipGame) {
 		BorderManagement b = battleshipGamesManager.getBorderManagement(battleshipGame);
-		Platform.runLater(() -> {
-			b.drawBoardInMyBorder(battleshipGame.getPlayer());
-			b.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
-		});
+		if (battleshipGame.getPlayer() != null) {
+			Platform.runLater(() -> {
+				b.drawBoardInMyBorder(battleshipGame.getPlayer());
+				b.drawOpponentBoardInOpponentBorder(battleshipGame.getPlayer());
+			});
+		}
 	}
 
 	public Object playBattleship(String nick, String opponentPlayerNick) {
@@ -115,12 +128,14 @@ public class BattleshipManagement {
 
 	public Object sendAcceptTheBattleshipGame(boolean isAccept, String opponentPlayerNick) {
 		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		battleshipGamesManager.getBattleshipView(opponentPlayerNick).closeAcceptanceWindow();
+
 		if (isAccept) {
 			battleshipGame.setGameStatus(BattleshipGame.ACCEPTING_THE_GAME);
 		} else {
 			battleshipGame.setGameStatus(BattleshipGame.REJECTION_GAME_PROPOSAL);
+			deleteBattleshipGame(opponentPlayerNick);
 		}
-		battleshipGamesManager.getBattleshipView(opponentPlayerNick).closeAcceptanceWindow();
 		return battleshipGame;
 	}
 
@@ -128,10 +143,14 @@ public class BattleshipManagement {
 		return battleshipGamesManager.getBattleshipGame(opponentPlayerNick) != null;
 	}
 
+	public void deleteBattleshipGame(String opponentPlayerNick) {
+		battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
+	}
+
 	public void acceptRejectionGameProspalInformation(String opponentPlayerNick) {
 		BattleshipView battleshipView = battleshipGamesManager.getBattleshipView(opponentPlayerNick);
 		battleshipView.closeInformationAndAcceptanceWindow();
-		battleshipGamesManager.deleteBattleshipGame(opponentPlayerNick);
+		deleteBattleshipGame(opponentPlayerNick);
 	}
 
 	public Object sendShipsAdded(String opponentPlayerNick, Player player) {
@@ -167,8 +186,26 @@ public class BattleshipManagement {
 	public void setBordersToBorderManagement(VBox myBorder, VBox opponentBorder, String opponentPlayerNick) {
 		battleshipGamesManager.getBorderManagement(opponentPlayerNick).setBorders(myBorder, opponentBorder);
 	}
-	
+
 	public BorderManagement getBorderManagement(String opponentPlayerNick) {
 		return battleshipGamesManager.getBorderManagement(opponentPlayerNick);
+	}
+
+	public boolean checkIfBattleshipGameHasBeenCompleted(String opponentPlayerNick) {
+		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		return battleshipGame.getGameStatus() == BattleshipGame.END_GAME;
+	}
+
+	public Object sendResignationFromTheGame(String opponentPlayerNick) {
+		BattleshipGame battleshipGame = battleshipGamesManager.getBattleshipGame(opponentPlayerNick);
+		battleshipGame.setGameStatus(BattleshipGame.END_GAME);
+		battleshipGame.setWinnerNick(opponentPlayerNick);
+
+		return battleshipGame;
+	}
+
+	public void closeBattleshipMainScreen(String opponentPlayerNick) {
+		// TODO Auto-generated method stub
+
 	}
 }

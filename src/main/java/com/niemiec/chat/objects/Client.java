@@ -76,4 +76,16 @@ public class Client {
 		return messagesManagement.checkIfTheButtonWasUsed(opponentPlayerNick, event);
 	}
 
+	public boolean checkIfBattleshipGameHasBeenCompleted(String opponentPlayerNick) {
+		return messagesManagement.checkIfBattleshipGameHasBeenCompleted(opponentPlayerNick);
+	}
+
+	public void sendResignationFromTheGame(String opponentPlayerNick) {
+		connection.sendTheObject(messagesManagement.sendResignationFromTheGame(opponentPlayerNick));
+	}
+
+	public void closeBattleshipMainScreen(String opponentPlayerNick) {
+		messagesManagement.closeBattleshipMainScreen(opponentPlayerNick);
+	}
+
 }

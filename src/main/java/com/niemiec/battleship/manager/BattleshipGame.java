@@ -18,7 +18,7 @@ public class BattleshipGame implements Serializable {
 	private String invitingPlayerNick;
 	private String opponentPlayerNick;
 	
-	private Player player;
+	private Player player = null;
 	private String nickWhoseTourn;
 
 	private Player invitingPlayer;
